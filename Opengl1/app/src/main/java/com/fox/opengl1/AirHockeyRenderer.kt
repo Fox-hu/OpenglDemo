@@ -30,22 +30,22 @@ class AirHockeyRenderer(val context: Context) : GLSurfaceView.Renderer {
         //顶点属性数组
         val tableVertices = floatArrayOf(
             //triangle 1
-            0f, 0f,
-            0f, 14f,
-            0f, 14f,
+            -0.5f, -0.5f,
+            0.5f, 0.5f,
+            -0.5f, 0.5f,
 
             //triangle 2
-            0f, 0f,
-            9f, 14f,
-            9f, 0f,
+            -0.5f, -0.5f,
+            0.5f, -0.5f,
+            0.5f, 0.5f,
 
             //line 1
-            0f, 7f,
-            9f, 7f,
+            -0.5f, 0f,
+            0.5f, 0f,
 
             //mallets
-            4.5f, 2f,
-            4.5f, 12f
+            0f, -0.25f,
+            0f, 0.25f
         )
 
         //这里是在本地内存中存储数据 这里的本地内存不是jvm管理的内存 它不受垃圾回收期管控
@@ -56,8 +56,7 @@ class AirHockeyRenderer(val context: Context) : GLSurfaceView.Renderer {
     }
 
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
-        //将屏幕清空为红色
-        glClearColor(1.0f, 0.0f, 0.0f, 1.0f)
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f)
 
         val vertexShaderSource = readTextFileFromRes(context, R.raw.simple_vertex_shader)
         val fragmentShaderSource = readTextFileFromRes(context, R.raw.simple_fragment_shader)
@@ -88,6 +87,7 @@ class AirHockeyRenderer(val context: Context) : GLSurfaceView.Renderer {
             0,
             vertexData
         )
+        glEnableVertexAttribArray(aPositionLocation)
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -98,5 +98,17 @@ class AirHockeyRenderer(val context: Context) : GLSurfaceView.Renderer {
     override fun onDrawFrame(gl: GL10?) {
         //擦除屏幕上所有颜色，并用之前glClearColor调用定义的颜色填充整个屏幕
         glClear(GL_COLOR_BUFFER_BIT)
+        //draw 2 triangles，take 6 item from input array
+        glUniform4f(colorLocation,1.0f,1.0f,1.0f,1.0f)
+        glDrawArrays(GL_TRIANGLES,0,6)
+        //draw line, take 2 item from input array
+        glUniform4f(colorLocation,1.0f,0.0f,0.0f,1.0f)
+        glDrawArrays(GL_LINES,6,2)
+        //draw first mallet blue,first is the 8th item
+        glUniform4f(colorLocation,0.0f,0.0f,1.0f,1.0f)
+        glDrawArrays(GL_POINTS,8,1)
+        //draw second mallet red,second is the 9th item
+        glUniform4f(colorLocation,1.0f,0.0f,0.0f,1.0f)
+        glDrawArrays(GL_POINTS,9,1)
     }
 }
