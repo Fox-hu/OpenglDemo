@@ -15,7 +15,7 @@ import javax.microedition.khronos.opengles.GL10
  */
 class AirHockeyRenderer(val context: Context) : GLSurfaceView.Renderer {
 
-    val POSITION_COMPONNT_COUNT = 2
+    val POSITION_COMPONENT_COUNT = 2
     val BYTES_PRE_FLOAT = 4
     val U_COLOR = "u_Color"
     val A_POSITION = "a_Position"
@@ -29,6 +29,24 @@ class AirHockeyRenderer(val context: Context) : GLSurfaceView.Renderer {
     init {
         //顶点属性数组
         val tableVertices = floatArrayOf(
+            //fill screen triangle
+            -1.0f,-1.0f,
+            1.0f,1.0f,
+            -1.0f,1.0f,
+
+            -1.0f, -1.0f,
+            1.0f, -1.0f,
+            1.0f, 1.0f,
+
+            //3/4 fill screen triangle
+            -0.75f,-0.75f,
+            0.75f,0.75f,
+            -0.75f,0.75f,
+
+            -0.75f, -0.75f,
+            0.75f, -0.75f,
+            0.75f, 0.75f,
+
             //triangle 1
             -0.5f, -0.5f,
             0.5f, 0.5f,
@@ -81,7 +99,7 @@ class AirHockeyRenderer(val context: Context) : GLSurfaceView.Renderer {
         vertexData.position(0)
         glVertexAttribPointer(
             aPositionLocation,
-            POSITION_COMPONNT_COUNT,
+            POSITION_COMPONENT_COUNT,
             GL_FLOAT,
             false,
             0,
@@ -98,17 +116,24 @@ class AirHockeyRenderer(val context: Context) : GLSurfaceView.Renderer {
     override fun onDrawFrame(gl: GL10?) {
         //擦除屏幕上所有颜色，并用之前glClearColor调用定义的颜色填充整个屏幕
         glClear(GL_COLOR_BUFFER_BIT)
+        //draw full screen 2 triangles,take 6 item from input array
+        //because of each take 2 bytes for x&y ,see POSITION_COMPONENT_COUNT
+        glUniform4f(colorLocation,0.0f,1.0f,1.0f,1.0f)
+        glDrawArrays(GL_TRIANGLES,0,6)
+        //draw 3/4 full screen 2 triangles,take 6 item from input array
+        glUniform4f(colorLocation,1.0f,0.0f,1.0f,1.0f)
+        glDrawArrays(GL_TRIANGLES,6,6)
         //draw 2 triangles，take 6 item from input array
         glUniform4f(colorLocation,1.0f,1.0f,1.0f,1.0f)
-        glDrawArrays(GL_TRIANGLES,0,6)
+        glDrawArrays(GL_TRIANGLES,12,6)
         //draw line, take 2 item from input array
         glUniform4f(colorLocation,1.0f,0.0f,0.0f,1.0f)
-        glDrawArrays(GL_LINES,6,2)
+        glDrawArrays(GL_LINES,18,2)
         //draw first mallet blue,first is the 8th item
         glUniform4f(colorLocation,0.0f,0.0f,1.0f,1.0f)
-        glDrawArrays(GL_POINTS,8,1)
+        glDrawArrays(GL_POINTS,20,1)
         //draw second mallet red,second is the 9th item
         glUniform4f(colorLocation,1.0f,0.0f,0.0f,1.0f)
-        glDrawArrays(GL_POINTS,9,1)
+        glDrawArrays(GL_POINTS,21,1)
     }
 }
