@@ -12,7 +12,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         glSurface = GLSurfaceView(this)
-        glSurface?.setRenderer(AirHockeyRenderer())
+        glSurface?.setRenderer(AirHockeyRenderer(this))
         rendererSet = true
         setContentView(glSurface)
     }
