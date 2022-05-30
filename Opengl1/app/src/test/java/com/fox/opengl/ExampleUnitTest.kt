@@ -1,4 +1,4 @@
-package com.fox.opengl1
+package com.fox.opengl
 
 import org.junit.Test
 

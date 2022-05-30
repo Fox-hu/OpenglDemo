@@ -8,9 +8,9 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Opengl1" >
+        android:theme="@style/Theme.opengl2" >
         <activity
-            android:name="com.fox.opengl.MainActivity"
+            android:name=".MainActivity"
             android:exported="true" >
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
